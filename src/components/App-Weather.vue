@@ -1,24 +1,24 @@
 <template>
   <div class="app">
     <div class="container p-0">
+
       <div class="d-flex">
         <div class="card main-div w-100">
           <div class="p-3">
-            <h2 class="mb-1 day">Tuesday</h2>
-            <p class="text-light date mb-0">date</p>
-            <small>time</small>
+            <h2 class="mb-1 day">Today</h2>
+            <p class="text-light date mb-0">{{ date }}</p>
+            <small>{{ time }}</small>
             <h2 class="place">
-              <i class="fa fa-location">Rio <small>country </small></i>
+              <i class="fa fa-location">{{ name }} <small>{{ country }} </small></i>
             </h2>
             <div class="temp">
-              <h1 class="weather-tem">19&deg;</h1>
-              <h2 class="text-light">description</h2>
+              <h1 class="weather-tem">{{ temperature }}&deg;</h1>
+              <h2 class="text-light">{{ description }} <img :src="iconUrl"></h2>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="card card-2 w-100">
+        <div class="card card-2 w-100">
         <table class="m-4">
           <tbody>
             <tr>
@@ -35,6 +35,7 @@
             </tr>
           </tbody>
         </table>
+        <DaysWaeather></DaysWaeather>
         <div id="div_form" class="d-flex m-3 justify-content-center">
           <form>
             <input
@@ -45,12 +46,52 @@
           </form>
         </div>
       </div>
+    
+      </div>
+
+     
     </div>
   </div>
 </template>
 <script>
+import axios from 'axios';
+import DaysWaeather from './App-daysWeather.vue'
 export default {
   name: "myWeather",
+  components : {
+    DaysWaeather,
+  },
+  props:{
+    city: String,
+  },
+  data(){
+    return{
+      temperature:null,
+      description: null,
+      iconUrl: null,
+      date: null,
+      time: null,
+      name: null,
+      sea_level: null,
+      wind: null,
+      country: null,
+      monthName: ["January", "February", "March", "April", "May", "June", "July", "August", "september", "October", "November", "December"],
+    }
+  },
+  async created(){
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=8331cdef4f10633c84fd856ce65588b0`)
+    const weatherDate = response.date;
+    this.temperature = Math.round (weatherDate.main.temp);
+    this.temperature = weatherDate.weather[0].description;
+    this.name = weatherDate.name;
+    this.iconUrl = `https://api.openweathermap.org/img/w/${weatherDate.weather[0].icon}.png`;
+    const d = new Date();
+    this.date = d.getDate() + ':' + this.monthName[d.getMonth()] + ':' + d.getFullYear();
+    this.time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+
+
+    console.log(response);
+  }
 };
 </script>
 <style scoped>
@@ -88,9 +129,7 @@ h2.mb-1.day {
   background-color: #212730;
   border-radius: 20px;
 }
-/*h2, p{
-    padding: 0 25px 0;
-}*/
+
 .card-details {
   margin-left: 19px;
 }
