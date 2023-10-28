@@ -23,25 +23,27 @@
           <tbody>
             <tr>
               <th>Sea Level</th>
-              <td>100</td>
+              <td v-if="sea_level > 0">{{ sea_level }}</td>
+              <td v-else>Null</td>
             </tr>
             <tr>
-              <th>Sea Level</th>
-              <td>100</td>
+              <th>Humidity</th>
+              <td>{{ humidity }}</td>
             </tr>
             <tr>
-              <th>Sea Level</th>
-              <td>100</td>
+              <th>Wind</th>
+              <td>{{ wind }}</td>
             </tr>
           </tbody>
         </table>
-        <DaysWaeather></DaysWaeather>
+        <DaysWaeather :cityname="cityname"></DaysWaeather>
         <div id="div_form" class="d-flex m-3 justify-content-center">
           <form>
             <input
+            @click="changeLocation()"
               type="button"
               value="Change Location"
-              class="btn change-btn btn-primary"
+              class="btn change_btn change-btn btn-primary"
             />
           </form>
         </div>
@@ -66,6 +68,7 @@ export default {
   },
   data(){
     return{
+      cityname: this.city,
       temperature:null,
       description: null,
       iconUrl: null,
@@ -73,24 +76,34 @@ export default {
       time: null,
       name: null,
       sea_level: null,
+      humidity: null,
       wind: null,
       country: null,
       monthName: ["January", "February", "March", "April", "May", "June", "July", "August", "september", "October", "November", "December"],
     }
   },
+  methods:{
+    changeLocation(){
+      window.location.reload();
+    }
+  },
   async created(){
     const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=8331cdef4f10633c84fd856ce65588b0`)
-    const weatherDate = response.date;
+    const weatherDate = response.data;
     this.temperature = Math.round (weatherDate.main.temp);
     this.temperature = weatherDate.weather[0].description;
     this.name = weatherDate.name;
+    this.wind = weatherDate.wind.speed;
+    this.sea_level = weatherDate.main.sea_level;
+    this.country = weatherDate.sys.country;
+    this.humidity = weatherDate.main.humidity;
+
     this.iconUrl = `https://api.openweathermap.org/img/w/${weatherDate.weather[0].icon}.png`;
     const d = new Date();
     this.date = d.getDate() + ':' + this.monthName[d.getMonth()] + ':' + d.getFullYear();
     this.time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 
-
-    console.log(response);
+    console.log(weatherDate);
   }
 };
 </script>
