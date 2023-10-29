@@ -91,7 +91,7 @@ export default {
     const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=8331cdef4f10633c84fd856ce65588b0`)
     const weatherDate = response.data;
     this.temperature = Math.round (weatherDate.main.temp);
-    this.temperature = weatherDate.weather[0].description;
+    this.description = weatherDate.weather[0].description;
     this.name = weatherDate.name;
     this.wind = weatherDate.wind.speed;
     this.sea_level = weatherDate.main.sea_level;

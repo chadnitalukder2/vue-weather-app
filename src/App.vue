@@ -30,8 +30,13 @@ export default {
   },
   methods :{
     async searchWeather (){
-      this.showWeather = false;
-      await this.$nextTick();
+      if(!this.city){
+        alert ("Enter a city name")
+        return
+      }
+
+      // this.showWeather = false;
+      // await this.$nextTick();
       this.showWeather = true;
     }
   }
