@@ -34,6 +34,10 @@
               <th>Wind</th>
               <td>{{ wind }}</td>
             </tr>
+            <tr>
+              <th>Pressure</th>
+              <td>{{ pressure }}</td>
+            </tr>
           </tbody>
         </table>
         <DaysWaeather :cityname="cityname"></DaysWaeather>
@@ -79,6 +83,7 @@ export default {
       humidity: null,
       wind: null,
       country: null,
+      pressure: null,
       monthName: ["January", "February", "March", "April", "May", "June", "July", "August", "september", "October", "November", "December"],
     }
   },
@@ -97,6 +102,7 @@ export default {
     this.sea_level = weatherDate.main.sea_level;
     this.country = weatherDate.sys.country;
     this.humidity = weatherDate.main.humidity;
+    this.pressure = weatherDate.main.pressure;
 
     this.iconUrl = `https://api.openweathermap.org/img/w/${weatherDate.weather[0].icon}.png`;
     const d = new Date();

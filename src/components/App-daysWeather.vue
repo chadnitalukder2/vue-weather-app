@@ -40,7 +40,7 @@ export default {
     await axios.get(apiUrl).then(Response => {
         const forecastData = Response.data.list;
         const filteredData = forecastData.map(item => {
-
+           
             return{
                 date : moment(item.dt_txt.split(' ')[0]),
                 temperature:  Math.round(item.main.temp),
@@ -48,6 +48,7 @@ export default {
                 iconUrl:`https://api.openweathermap.org/img/w/${item.weather[0].icon}.png`,
             };
         }).reduce((acc, item) => {
+          
             if(!acc.some(day => day.date.isSame(item.date, 'day'))){
                 acc.push(item);
             }
