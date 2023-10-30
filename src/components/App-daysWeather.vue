@@ -3,7 +3,7 @@
     <div v-if="loading" class="loading">Loading.....</div>
 
     <ul v-else class="p-0">
-        <li v-for="day in forecast" :key="day.date" class="li_active">
+        <li v-for="(day,index) in forecast" :key="index" class="li_active">
             <div class="py-3"><img :src="day.iconUrl"></div>
             <div class="py-3">{{ getDayName(day.date) }}</div>
             <div class="py-3">{{ day.temperature }}&deg;C</div>
@@ -17,7 +17,8 @@ import axios from 'axios';
 import moment from 'moment';
 export default {
   props: {
-    cityname: String
+    cityname: String,
+    inputDays: String,
   },
   data (){
     return{
@@ -39,8 +40,10 @@ export default {
     
     await axios.get(apiUrl).then(Response => {
         const forecastData = Response.data.list;
+        console.log({Response});
+       
         const filteredData = forecastData.map(item => {
-           
+            
             return{
                 date : moment(item.dt_txt.split(' ')[0]),
                 temperature:  Math.round(item.main.temp),
@@ -51,13 +54,16 @@ export default {
           
             if(!acc.some(day => day.date.isSame(item.date, 'day'))){
                 acc.push(item);
+                
             }
+          
             return acc;
-        }, []).slice(1, 5);
+        }, []).slice(1, 8);
+        console.log(filteredData,"hi");
 
       
         this.forecast = filteredData;
-    
+        
         this.loading = false;
     }).catch(error => {
         console.error('Error fetching weather: ', error);

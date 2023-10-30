@@ -40,7 +40,8 @@
             </tr>
           </tbody>
         </table>
-        <DaysWaeather :cityname="cityname"></DaysWaeather>
+        {{ inputDays }}
+        <DaysWaeather :cityname="cityname" :inputDays="inputDays"></DaysWaeather>
         <div id="div_form" class="d-flex m-3 justify-content-center">
           <form>
             <input
@@ -69,9 +70,11 @@ export default {
   },
   props:{
     city: String,
+    days: String
   },
   data(){
     return{
+      inputDays: this.days,
       cityname: this.city,
       temperature:null,
       description: null,
@@ -93,6 +96,7 @@ export default {
     }
   },
   async created(){
+    console.log(this.days, "hi");
     const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=8331cdef4f10633c84fd856ce65588b0`)
     const weatherDate = response.data;
     this.temperature = Math.round (weatherDate.main.temp);
@@ -109,7 +113,7 @@ export default {
     this.date = d.getDate() + ':' + this.monthName[d.getMonth()] + ':' + d.getFullYear();
     this.time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 
-    console.log(weatherDate);
+  
   }
 };
 </script>
