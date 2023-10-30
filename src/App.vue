@@ -8,8 +8,11 @@
       </div>
       <button class="btn-search btn btn-primary" @click="searchWeather">Search	<i class="fa-solid fa-magnifying-glass"></i> </button>
     </div>
+
   </div>
+
   <br>
+  
   <weather :city="city" v-if="showWeather"></weather>
  </div>
 </template>
